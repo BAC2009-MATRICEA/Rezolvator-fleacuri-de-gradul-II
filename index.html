@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head><title>ecuatie de gradul 2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.2/math.min.js"></script></head>
+<body>
+    <h1>REZOLVATOR DE FLEACURI DE GRADUL II</h1>
+    <label>a= <input type="number" id="a"></label><br>
+    <label>b= <input type="number" id="b"></label><br>
+    <label>c= <input type="number" id="c"></label><br>
+    <button onclick="solveQuadratic()">rezolva</button>
+    <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
+    <script>
+        function simplifyRadical(n) {
+            let outside = 1;
+            let inside = n;
+            for (let i = 2; i*i <= inside; i++)
+        {
+            while (inside % (i*i) === 0){
+                inside = inside/ (i*i);
+                outside = outside* i;
+            }
+        }
+        if (inside === 1) return outside.toString();
+        if (outside === 1) return `√${inside}`;
+        return `${outside}√${inside}`;
+        }
+        function solveQuadratic() {
+            const a = math.fraction(document.getElementById("a").value);
+            const b = math.fraction(document.getElementById("b").value);
+            const c = math.fraction(document.getElementById("c").value);
+            const result = document.getElementById("result");
+            const discriminant = math.subtract(math.pow(b, 2), math.multiply(4, a, c));
+            const twoA = math.multiply(2, a);
+            if (math.equal(discriminant, 0)){
+                const x = math.divide(math.unaryMinus(b), twoA);
+                result.textContent = `Un fleac real: x = ${x.toFraction()}`;
+            } else if (math.larger(discriminant, 0)){
+                const Dnum = Number(discriminant);
+                const sqrtD = math.sqrt(Dnum);
+                if (math.isInteger(sqrtD)){
+                    const x1 = math.divide(math.subtract(math.unaryMinus(b), sqrtD), twoA);
+                    const x2 = math.divide(math.add(math.unaryMinus(b), sqrtD), twoA);
+                    result.textContent = `Doua fleacuri reale: x1 = ${x1.toFraction()}, x2 = ${x2.toFraction()}`;
+                } else {
+                const simplified = simplifyRadical(discriminant);
+                result.textContent = `Doua fleacuri reale: x1 = (-${b.toFraction()} + ${simplified}) / ${twoA.toFraction()}, x₂ = (-${b.toFraction()} - ${simplified}) / ${twoA.toFraction()}`;
+                }
+            } else {
+                result.textContent = "Fara fleacuri reale (Δ negativ)";
+            }
+        }
+    </script>
+</body>
+</html>
